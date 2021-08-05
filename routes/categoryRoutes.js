@@ -20,15 +20,26 @@ router.post("/", (req, res) => {
 		name,
 	});
 
-	console.log(req.body);
 	category
 		.save()
 		.then((category) => {
-			console.log(name);
 			res.send(category);
 		})
 		.catch(() => {
 			res.status(404).send("Category cannot be created");
+		});
+});
+
+router.delete("/:id", (req, res) => {
+	Category.findByIdAndRemove(req.params.id)
+		.then((category) => {
+			if (!category) {
+				return res.status(404).json({ success: false, message: "Requested category was not found!" });
+			}
+			return res.status(200).json({ success: true, message: "Category has been deleted!" });
+		})
+		.catch((err) => {
+			return res.status(400).json({ success: false, error: err });
 		});
 });
 
