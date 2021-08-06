@@ -6,6 +6,9 @@ const User = require("../models/user");
 // package for password hashing before storing in the database
 const bcrypt = require("bcryptjs");
 
+// package to generate an access token for the user on login
+const jwt = require("jsonwebtoken");
+
 router.get("/", (req, res) => {
 	User.find()
 		.populate("address")
@@ -90,6 +93,27 @@ router.delete("/:id", (req, res) => {
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });
+		});
+});
+
+router.post("/login", (req, res) => {
+	const { email, password } = req.body;
+
+	User.findOne({ email })
+		.then((user) => {
+			if (!user) return res.status(400).json({ success: false, message: "This email doesn't exist!" });
+			if (!bcrypt.compareSync(password, user.passwordHash)) {
+				return res
+					.status(400)
+					.json({ success: false, message: "Authentication failed, password is incorrect!" });
+			} else {
+				const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+				res.status(200).json({ userEmail: user.email, userId: user._id, token });
+			}
+		})
+		.catch((err) => {
+			// console.log(err);
+			res.status(400).json({ success: false, message: err });
 		});
 });
 
