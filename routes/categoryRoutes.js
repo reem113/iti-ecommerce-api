@@ -38,8 +38,8 @@ router.post("/", (req, res) => {
 		.then((category) => {
 			res.send(category);
 		})
-		.catch(() => {
-			res.status(404).send("Category cannot be created");
+		.catch((err) => {
+			res.status(500).send(err);
 		});
 });
 

@@ -8,13 +8,15 @@ require("dotenv/config");
 //importing routes
 const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
-// const userRoutes = require("./routes/userRoutes");
+const userRoutes = require("./routes/userRoutes");
+const addressRoutes = require("./routes/addressRoutes");
 // const orderRoutes = require("./routes/orderRoutes");
 
 //importing models
 const Product = require("./models/product");
 const Category = require("./models/category");
-// const User = require("./models/user");
+const User = require("./models/user");
+const Address = require("./models/address");
 // const Order = require("./models/order");
 
 const app = express();
@@ -32,7 +34,8 @@ app.use(morgan("dev"));
 //using routes
 app.use(`${api}/products`, productRoutes);
 app.use(`${api}/categories`, categoryRoutes);
-// app.use(`${api}/users`, userRoutes);
+app.use(`${api}/users`, userRoutes);
+app.use(`${api}/addresses`, addressRoutes);
 // app.use(`${api}/order`, orderRoutes);
 
 //connecting to the database

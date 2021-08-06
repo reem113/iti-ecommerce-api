@@ -155,7 +155,7 @@ router.get("/get/count", (req, res) => {
 	Product.countDocuments()
 		.then((count) => {
 			if (!count) {
-				return res.status(404).json({ message: "Couldn't get product count!" });
+				return res.status(400).json({ message: "Couldn't get product count!" });
 			}
 			return res.status(200).json({ productCount: count });
 		})
@@ -171,7 +171,7 @@ router.get("/get/featured", (req, res) => {
 		.limit(+count)
 		.then((featuredProducts) => {
 			if (!featuredProducts) {
-				return res.status(404).json({ message: "Couldn't get featured products!" });
+				return res.status(400).json({ message: "Couldn't get featured products!" });
 			}
 			return res.status(200).send(featuredProducts);
 		})
