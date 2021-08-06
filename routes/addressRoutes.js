@@ -42,20 +42,27 @@ router.post("/", (req, res) => {
 	address
 		.save()
 		.then((address) => {
-			User.findByIdAndUpdate(_userId, { address }, (err, result) => {
-				if (err) {
-					console.log(err);
-				} else {
-					console.log("Updated User: ", result);
+			User.findByIdAndUpdate(
+				_userId,
+				{ $push: { address } },
+				{ useFindAndModify: false, new: true },
+				(err, user) => {
+					if (err) {
+						console.log(err);
+						res.send(err);
+					} else {
+						console.log("Updated User: ", user);
+						res.json(user);
+					}
+					// res.send(address);
 				}
-				// res.send(address);
-			})
-				.then((user) => {
-					res.json(user);
-				})
-				.catch((err) => {
-					res.send(err);
-				});
+			);
+			// .then((user) => {
+			// 	res.json(user);
+			// })
+			// .catch((err) => {
+			// 	res.send(err);
+			// });
 		})
 		.catch((err) => {
 			res.status(500).send(err);
