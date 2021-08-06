@@ -3,9 +3,13 @@ const router = express.Router();
 
 const User = require("../models/user");
 
+// package for password hashing before storing in the database
+const bcrypt = require("bcryptjs");
+
 router.get("/", (req, res) => {
 	User.find()
 		.populate("address")
+		.select("-passwordHash")
 		.then((userList) => {
 			res.status(200).send(userList);
 		})
@@ -17,6 +21,7 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
 	User.findById(req.params.id)
 		.populate("address")
+		.select("-passwordHash")
 		.then((user) => {
 			if (!user) {
 				return res.status(404).json({ message: "User with the given id was not found!" });
@@ -29,7 +34,8 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-	const { name, email, passwordHash, phone, isAdmin } = req.body;
+	const { name, email, password, phone, isAdmin } = req.body;
+	const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(parseInt(process.env.HASH_SALT)));
 
 	let user = new User({
 		name,
