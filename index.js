@@ -34,7 +34,10 @@ app.options("*", cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
-app.use(authJwt);
+app.use(authJwt());
+app.use((err, req, res, next) => {
+	res.send(err);
+});
 //using routes
 app.use(`${api}/products`, productRoutes);
 app.use(`${api}/categories`, categoryRoutes);
