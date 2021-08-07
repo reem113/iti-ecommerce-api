@@ -107,7 +107,9 @@ router.post("/login", (req, res) => {
 					.status(400)
 					.json({ success: false, message: "Authentication failed, password is incorrect!" });
 			} else {
-				const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+				const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, {
+					expiresIn: "1d",
+				});
 				res.status(200).json({ userEmail: user.email, userId: user._id, token });
 			}
 		})
