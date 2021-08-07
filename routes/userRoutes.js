@@ -36,7 +36,7 @@ router.get("/:id", (req, res) => {
 		});
 });
 
-router.post("/", (req, res) => {
+router.post("/register", (req, res) => {
 	const { name, email, password, phone, isAdmin } = req.body;
 	const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(parseInt(process.env.HASH_SALT)));
 
