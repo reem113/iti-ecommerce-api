@@ -2,6 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
+
+const authJwt = require("./helpers/jwt");
+
 //importing environment variables
 require("dotenv/config");
 
@@ -31,6 +34,7 @@ app.options("*", cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+app.use(authJwt);
 //using routes
 app.use(`${api}/products`, productRoutes);
 app.use(`${api}/categories`, categoryRoutes);
