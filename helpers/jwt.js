@@ -12,6 +12,7 @@ const authJwt = () => {
 		},
 	}).unless({
 		path: [
+			// /\/api\/v1\/(.*)/, // <-- to exclude all routes uncomment this line
 			{ url: /\/api\/v1\/products(.*)/, method: ["GET", "OPTIONS"] },
 			{ url: /\/api\/v1\/categories(.*)/, method: ["GET", "OPTIONS"] },
 			`${process.env.API_URL}/users/login`,
