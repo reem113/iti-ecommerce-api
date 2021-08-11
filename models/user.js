@@ -28,6 +28,23 @@ const userSchema = new mongoose.Schema({
 			ref: "Address",
 		},
 	],
+	cart: [
+		{
+			product: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Product",
+				unique: true,
+			},
+		},
+	],
+	wishlist: [
+		{
+			product: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Product",
+			},
+		},
+	],
 });
 
 const User = mongoose.model("User", userSchema);

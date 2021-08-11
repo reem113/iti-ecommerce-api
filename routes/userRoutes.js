@@ -119,4 +119,80 @@ router.post("/login", (req, res) => {
 		});
 });
 
+router.get("/:id/cart", (req, res) => {
+	User.findById(req.params.id)
+		.populate("cart")
+		.select("cart")
+		.then((user) => {
+			if (!user) {
+				return res.status(404).json({ message: "User with the given id was not found!" });
+			}
+			return res.status(200).send(user);
+		})
+		.catch((err) => {
+			return res.status(400).json({ success: false, error: err });
+		});
+});
+
+router.get("/:id/wishlist", (req, res) => {
+	User.findById(req.params.id)
+		.populate("wishlist")
+		.select("wishlist")
+		.then((user) => {
+			if (!user) {
+				return res.status(404).json({ message: "User with the given id was not found!" });
+			}
+			return res.status(200).send(user);
+		})
+		.catch((err) => {
+			return res.status(400).json({ success: false, error: err });
+		});
+});
+
+router.put("/:id/cart", (req, res) => {
+	const { product } = req.body;
+	User.findByIdAndUpdate(
+		req.params.id,
+		{
+			$addToSet: { cart: { product } },
+		},
+		{
+			new: true,
+			useFindAndModify: false,
+		}
+	)
+		.then((user) => {
+			if (!user) {
+				return res.status(404).json({ message: "User with the given id was not found!" });
+			}
+			return res.status(200).send(user);
+		})
+		.catch((err) => {
+			return res.status(400).json({ success: false, error: err });
+		});
+});
+
+router.put("/:id/wishlist", (req, res) => {
+	const { product } = req.body;
+	User.findByIdAndUpdate(
+		req.params.id,
+		{
+			$addToSet: { wishlist: { product } },
+		},
+		{
+			new: true,
+			useFindAndModify: false,
+		}
+	)
+		.then((user) => {
+			if (!user) {
+				return res.status(404).json({ message: "User with the given id was not found!" });
+			}
+			return res.status(200).send(user);
+		})
+		.catch((err) => {
+			return res.status(400).json({ success: false, error: err });
+		});
+});
+
 module.exports = router;
