@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
@@ -24,6 +25,8 @@ const Order = require("./models/order");
 
 const app = express();
 
+const staticFilesDir = path.join(__dirname, "public");
+
 //api prefix
 const api = process.env.API_URL;
 
@@ -33,6 +36,7 @@ app.options("*", cors());
 //middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(staticFilesDir));
 app.use(morgan("dev"));
 app.use(authJwt());
 app.use((err, req, res, next) => {
