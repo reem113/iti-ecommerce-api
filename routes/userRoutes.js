@@ -121,7 +121,7 @@ router.post("/login", (req, res) => {
 
 router.get("/:id/cart", (req, res) => {
 	User.findById(req.params.id)
-		.populate("cart")
+		.populate("cart.product")
 		.select("cart")
 		.then((user) => {
 			if (!user) {
@@ -136,7 +136,7 @@ router.get("/:id/cart", (req, res) => {
 
 router.get("/:id/wishlist", (req, res) => {
 	User.findById(req.params.id)
-		.populate("wishlist")
+		.populate("wishlist.product")
 		.select("wishlist")
 		.then((user) => {
 			if (!user) {
