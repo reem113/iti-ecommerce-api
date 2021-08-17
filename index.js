@@ -33,7 +33,7 @@ const api = process.env.API_URL;
 app.use(cors());
 app.options("*", cors());
 
-//middleware
+//middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(staticFilesDir));
@@ -51,7 +51,7 @@ app.use(`${api}/orders`, orderRoutes);
 
 //connecting to the database
 mongoose
-	.connect(process.env.CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
+	.connect(process.env.CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 	.then(() => {
 		console.log("Connected to db successfully ...");
 	})
