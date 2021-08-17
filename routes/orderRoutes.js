@@ -10,10 +10,10 @@ router.get("/", (req, res) => {
 		.populate("user")
 		.populate("shippingAddress")
 		.then((orderList) => {
-			res.status(200).send(orderList);
+			res.status(200).json({ success: true, orderList });
 		})
 		.catch((err) => {
-			res.status(500).json({ error: err, success: false });
+			res.status(500).json({ success: false, error: err });
 		});
 });
 
@@ -27,9 +27,9 @@ router.get("/:id", (req, res) => {
 		.populate("shippingAddress")
 		.then((order) => {
 			if (!order) {
-				return res.status(404).json({ message: "Order with the given id was not found!" });
+				return res.status(404).json({ success: false, message: "Order with the given id was not found!" });
 			}
-			return res.status(200).send(order);
+			return res.status(200).json({ success: true, order });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });
@@ -72,9 +72,9 @@ router.post("/", async (req, res) => {
 
 	order = await order.save();
 
-	if (!order) return res.status(400).send("the order cannot be created!");
+	if (!order) return res.status(400).json({ success: false, message: "the order cannot be created!" });
 
-	res.send(order);
+	res.json({ success: true, order });
 });
 
 router.delete("/:id", (req, res) => {
@@ -104,9 +104,9 @@ router.get("/user/:id", (req, res) => {
 		})
 		.then((userOrders) => {
 			if (!userOrders) {
-				return res.status(404).json({ message: "Orders of the given user id was not found!" });
+				return res.status(404).json({ success: false, message: "Orders of the given user id was not found!" });
 			}
-			return res.status(200).send(userOrders);
+			return res.status(200).json({ success: true, userOrders });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });
@@ -118,9 +118,9 @@ router.get("/get/count", (req, res) => {
 	Order.countDocuments()
 		.then((count) => {
 			if (!count) {
-				return res.status(400).json({ message: "Couldn't get order count!" });
+				return res.status(400).json({ success: false, message: "Couldn't get order count!" });
 			}
-			return res.status(200).json({ orderCount: count });
+			return res.status(200).json({ success: true, orderCount: count });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });

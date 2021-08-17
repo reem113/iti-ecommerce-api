@@ -12,10 +12,10 @@ router.get("/", (req, res) => {
 	Product.find(categoryFilter)
 		.populate("category")
 		.then((productList) => {
-			res.status(200).send(productList);
+			res.status(200).json({ success: true, productList });
 		})
 		.catch((err) => {
-			res.status(500).json({ error: err, success: false });
+			res.status(500).json({ success: false, error: err });
 		});
 });
 
@@ -29,9 +29,9 @@ router.get("/:id", (req, res) => {
 		.populate("category")
 		.then((product) => {
 			if (!product) {
-				return res.status(404).json({ message: "Product with the given id was not found!" });
+				return res.status(404).json({ success: false, message: "Product with the given id was not found!" });
 			}
-			return res.status(200).send(product);
+			return res.status(200).json({ success: true, product });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });
@@ -41,7 +41,7 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
 	Category.findById(req.body.category).then((category) => {
 		if (!category) {
-			return res.status(400).send("Invalid category");
+			return res.status(400).json({ success: false, message: "Invalid category" });
 		}
 	});
 
@@ -79,7 +79,7 @@ router.post("/", (req, res) => {
 			if (!product) {
 				return res.status(500).json({ success: false, message: "The product cannot be created" });
 			}
-			return res.send(product);
+			return res.status(200).json({ success: true, product });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, message: err });
@@ -89,7 +89,7 @@ router.post("/", (req, res) => {
 router.put("/:id", (req, res) => {
 	Category.findById(req.body.category).then((category) => {
 		if (!category) {
-			return res.status(400).send("Invalid category");
+			return res.status(400).json({ success: false, message: "Invalid category" });
 		}
 	});
 
@@ -128,9 +128,9 @@ router.put("/:id", (req, res) => {
 	)
 		.then((product) => {
 			if (!product) {
-				return res.status(404).json({ message: "Product with the given id was not found!" });
+				return res.status(404).json({ success: false, message: "Product with the given id was not found!" });
 			}
-			return res.status(200).send(product);
+			return res.status(200).json({ success: true, product });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });
@@ -155,9 +155,9 @@ router.get("/get/count", (req, res) => {
 	Product.countDocuments()
 		.then((count) => {
 			if (!count) {
-				return res.status(400).json({ message: "Couldn't get product count!" });
+				return res.status(400).json({ success: false, message: "Couldn't get product count!" });
 			}
-			return res.status(200).json({ productCount: count });
+			return res.status(200).json({ success: true, productCount: count });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });
@@ -171,9 +171,9 @@ router.get("/get/featured", (req, res) => {
 		.limit(+count)
 		.then((featuredProducts) => {
 			if (!featuredProducts) {
-				return res.status(400).json({ message: "Couldn't get featured products!" });
+				return res.status(400).json({ success: false, message: "Couldn't get featured products!" });
 			}
-			return res.status(200).send(featuredProducts);
+			return res.status(200).json({ success: true, featuredProducts });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });

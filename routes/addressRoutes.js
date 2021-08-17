@@ -7,10 +7,10 @@ const User = require("../models/user");
 router.get("/", (req, res) => {
 	Address.find()
 		.then((addressList) => {
-			res.status(200).send(addressList);
+			res.status(200).json({ success: true, addressList });
 		})
 		.catch((err) => {
-			res.status(500).json({ error: err, success: false });
+			res.status(500).json({ success: false, error: err });
 		});
 });
 
@@ -18,9 +18,9 @@ router.get("/:id", (req, res) => {
 	Address.findById(req.params.id)
 		.then((address) => {
 			if (!address) {
-				return res.status(404).json({ message: "Address with the given id was not found!" });
+				return res.status(404).json({ success: false, message: "Address with the given id was not found!" });
 			}
-			return res.status(200).send(address);
+			return res.status(200).json({ success: true, address });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });
@@ -65,7 +65,7 @@ router.post("/", (req, res) => {
 			// });
 		})
 		.catch((err) => {
-			res.status(500).send(err);
+			res.status(500).json({ success: false, err });
 		});
 });
 
@@ -86,9 +86,9 @@ router.put("/:id", (req, res) => {
 	)
 		.then((address) => {
 			if (!address) {
-				return res.status(404).json({ message: "Address with the given id was not found!" });
+				return res.status(404).json({ success: false, message: "Address with the given id was not found!" });
 			}
-			return res.status(200).send(address);
+			return res.status(200).json({ success: true, address });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });

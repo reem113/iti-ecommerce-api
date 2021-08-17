@@ -6,10 +6,10 @@ const Category = require("../models/category");
 router.get("/", (req, res) => {
 	Category.find()
 		.then((categoryList) => {
-			res.status(200).send(categoryList);
+			res.status(200).json({ success: true, categoryList });
 		})
 		.catch((err) => {
-			res.status(500).json({ error: err, success: false });
+			res.status(500).json({ success: false, error: err });
 		});
 });
 
@@ -17,9 +17,9 @@ router.get("/:id", (req, res) => {
 	Category.findById(req.params.id)
 		.then((category) => {
 			if (!category) {
-				return res.status(404).json({ message: "Category with the given id was not found!" });
+				return res.status(404).json({ success: false, message: "Category with the given id was not found!" });
 			}
-			return res.status(200).send(category);
+			return res.status(200).json({ success: true, category });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });
@@ -56,9 +56,9 @@ router.put("/:id", (req, res) => {
 	)
 		.then((category) => {
 			if (!category) {
-				return res.status(404).json({ message: "Category with the given id was not found!" });
+				return res.status(404).json({ success: false, message: "Category with the given id was not found!" });
 			}
-			return res.status(200).send(category);
+			return res.status(200).json({ success: true, category });
 		})
 		.catch((err) => {
 			return res.status(400).json({ success: false, error: err });
